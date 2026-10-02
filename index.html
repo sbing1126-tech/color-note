@@ -247,29 +247,29 @@ function mk(k,inline){const l=pcLv(k);if(!l)return"";return inline?`<span class=
 function pcButtons(){
  $("pcseg").innerHTML=[["","선택 안 함"],...Object.entries(PCN)].map(([k,n])=>`<button data-pc="${k}" aria-pressed="${k===pcs}">${n}</button>`).join("");
  $("pcsub").innerHTML=pcs?[["","전체"],...SUBS[pcs].map(k=>[k,SUB[k]])].map(([k,n])=>`<button data-pu="${k}" aria-pressed="${k===pcu}">${n}</button>`).join(""):"";
- $("pchint").textContent=!pcs?"퍼스널 컬러를 고르면 각 색에 추천 여부가 표시돼요.":`${pcn()}: ${pcu?SD[pcu]:PCH[pcs]}이 잘 맞아요. 색 위에 ○ 추천, △ 무난, ✕ 비추가 표시돼요.`;}
-function rows(id,list,sel){
- $(id).innerHTML=list.map(([k,t])=>`<button class="row" data-r="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i><span><strong>${C[k][0]}${mk(k,1)}</strong><small>${t}</small></span></button>`).join("");}
+ $("pchint").textContent=!pcs?"퍼스널 컬러를 고르면 상의 색에 추천 여부가 표시돼요.":`${pcn()}: ${pcu?SD[pcu]:PCH[pcs]}이 잘 맞아요. 상의 색에만 ○ 추천, △ 무난, ✕ 비추가 표시돼요.`;}
+function rows(id,list,sel,show){
+ $(id).innerHTML=list.map(([k,t])=>`<button class="row" data-r="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i><span><strong>${C[k][0]}${show?mk(k,1):""}</strong><small>${t}</small></span></button>`).join("");}
 function render(){
  const base=mode==="top"?T:B,other=mode==="top"?B:T,pn=mode==="top"?"하의":"상의";
  const d=lists(base);
  $("pTop").setAttribute("fill",C[T][1]);$("pBot").setAttribute("fill",C[B][1]);
  $("iTop").style.background=C[T][1];$("iBot").style.background=C[B][1];
- $("nTop").innerHTML=C[T][0]+mk(T,1);$("nBot").innerHTML=C[B][0]+mk(B,1);
+ $("nTop").innerHTML=C[T][0]+mk(T,1);$("nBot").textContent=C[B][0];
  $("sTop").setAttribute("aria-expanded",open==="top");$("sBot").setAttribute("aria-expanded",open==="bottom");
  const panel=$("panel");panel.hidden=!open;
  if(open){const sel=open==="top"?T:B;
-  $("all").innerHTML=GRP.map(([n,ks])=>`<div class="gl">${n}</div><div class="chips">`+ks.split(" ").map(k=>`<button class="chip" data-c="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i>${mk(k)}<span>${C[k][0]}</span></button>`).join("")+`</div>`).join("");}
+  $("all").innerHTML=GRP.map(([n,ks])=>`<div class="gl">${n}</div><div class="chips">`+ks.split(" ").map(k=>`<button class="chip" data-c="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i>${open==="top"?mk(k):""}<span>${C[k][0]}</span></button>`).join("")+`</div>`).join("");}
  const[lv,why]=judge(base,other);
  $("pt").textContent=`상의 ${C[T][0]} + 하의 ${C[B][0]}`;
  const v=$("pv");v.textContent=LB[lv];v.className="badge "+lv;
  $("pd").textContent=why;
- $("pcl").textContent=pcs?`${pcn()} 기준 · 상의 ${C[T][0]} ${PCT[pcLv(T)]} / 하의 ${C[B][0]} ${PCT[pcLv(B)]}. 얼굴 가까이 오는 상의 색이 더 중요해요.`:"";
+ $("pcl").textContent=pcs?`${pcn()} 기준 · 상의 ${C[T][0]}: ${PCT[pcLv(T)]}. 얼굴 가까이 오는 상의 색만 기준으로 봐요.`:"";
  pcButtons();
  $("s1").textContent=`${pn}는 이 색이 잘 어울려요 (${d.safe.length})`;
  $("s2").textContent=`포인트로 좋아요 (${d.point.length})`;
  $("s3").textContent=`조심하면 좋아요 (${d.avoid.length})`;
- rows("safe",d.safe,other);rows("point",d.point,other);rows("avoid",d.avoid,other);
+ const sp=mode==="bottom";rows("safe",d.safe,other,sp);rows("point",d.point,other,sp);rows("avoid",d.avoid,other,sp);
  $("m-top").setAttribute("aria-pressed",mode==="top");$("m-bottom").setAttribute("aria-pressed",mode==="bottom");}
 function base0(){return base}
 document.addEventListener("click",e=>{

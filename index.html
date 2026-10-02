@@ -125,12 +125,12 @@ burgundy:["버건디","#6e1f2f"],denim:["데님","#4a6fa5"],red:["레드","#c039
 pink:["핑크","#e8a0b4"],cream:["크림","#efe6d2"],olive:["올리브","#5b6236"],sky:["연청","#a9c4de"],
 camel:["카멜","#b98a55"],green:["포레스트 그린","#2f5d46"],terra:["테라코타","#c2693f"],lav:["라벤더","#b7a6d6"],
 lgray:["라이트그레이","#c9ccd1"],ivory:["아이보리","#f3eedf"],sand:["샌드","#cdb892"],taupe:["토프","#8b7b6e"],cocoa:["코코아","#9a6b4e"],dbrown:["다크브라운","#4a2f1d"],
-ice:["아이스블루","#d6e6f2"],cobalt:["코발트","#2f55b8"],mint:["민트","#a8d5c2"],sage:["세이지","#9fae96"],teal:["틸","#2c7a7b"],
+ice:["아이시블루","#d6e6f2"],icepink:["아이시핑크","#f7e4ee"],icelav:["아이시라벤더","#e7e1f4"],icemint:["아이시민트","#dff3ec"],iceyellow:["아이시옐로","#f8f4cf"],cobalt:["코발트","#2f55b8"],mint:["민트","#a8d5c2"],sage:["세이지","#9fae96"],teal:["틸","#2c7a7b"],
 blush:["블러시","#f3cfd3"],rose:["로즈","#c46f86"],fuchsia:["푸시아","#c2287d"],coral:["코랄","#ef7d6a"],plum:["플럼","#5e2a4e"],
 lemon:["레몬","#f2dc63"],peach:["피치","#f5c2a0"],orange:["오렌지","#e8853a"],mauve:["모브","#a58698"],purple:["퍼플","#6b4a8f"]};
-const F={lgray:"gray",ivory:"cream",sand:"beige",taupe:"beige",cocoa:"brown",dbrown:"brown",ice:"sky",cobalt:"denim",mint:"green",sage:"olive",teal:"green",blush:"pink",rose:"pink",fuchsia:"pink",coral:"terra",plum:"burgundy",lemon:"mustard",peach:"terra",orange:"terra",mauve:"lav",purple:"lav"};
+const F={lgray:"gray",ivory:"cream",sand:"beige",taupe:"beige",cocoa:"brown",dbrown:"brown",icepink:"ice",icelav:"ice",icemint:"ice",iceyellow:"ice",cobalt:"denim",mint:"green",sage:"olive",teal:"green",blush:"pink",rose:"pink",fuchsia:"pink",coral:"terra",plum:"burgundy",lemon:"mustard",peach:"terra",orange:"terra",mauve:"lav",purple:"lav"};
 const fam=k=>F[k]||k;
-const GRP=[["무채색","black charcoal gray lgray white ivory"],["베이지·브라운","cream sand beige taupe camel cocoa brown dbrown"],["블루","ice sky denim cobalt navy"],["그린","mint sage olive khaki green teal"],["레드·핑크","blush pink rose fuchsia coral red burgundy plum"],["옐로·오렌지","lemon mustard peach orange terra"],["퍼플","lav mauve purple"]];
+const GRP=[["무채색","black charcoal gray lgray white ivory"],["아이시 (아주 연한 색)","ice icepink icelav icemint iceyellow"],["베이지·브라운","cream sand beige taupe camel cocoa brown dbrown"],["블루","sky denim cobalt navy"],["그린","mint sage olive khaki green teal"],["레드·핑크","blush pink rose fuchsia coral red burgundy plum"],["옐로·오렌지","lemon mustard peach orange terra"],["퍼플","lav mauve purple"]];
 
 // 각 항목: [색, 한 줄 이유]
 const D={
@@ -197,6 +197,11 @@ function guess(a,b){
  if(a===b)return["avoid","같은 색이라 위아래 구분이 안 돼 밋밋해요."];
  const[h1,c1,l1]=hsl(C[a][1]),[h2,c2,l2]=hsl(C[b][1]);
  const dl=Math.abs(l1-l2),dh=Math.min(Math.abs(h1-h2),360-Math.abs(h1-h2));
+ const p1=l1>.85&&c1>=.04&&c1<.12,p2=l2>.85&&c2>=.04&&c2<.12;
+ if(p1||p2){
+  if(p1&&p2)return["avoid","둘 다 아주 연한 색이라 흐릿해 보일 수 있어요. 한쪽을 진한 색으로 바꿔 보세요."];
+  const o=p1?l2:l1;
+  return o<.5?["good","아주 연한 색이라 어두운 색과 대비가 선명하고 깔끔해요."]:["ok","연한 색이라 부담 없어요. 진한 색과 맞추면 더 또렷해요."];}
  if(c1<.12||c2<.12){
   if(c1<.12&&c2<.12)return dl<.15?["avoid","무채색끼리 밝기도 비슷해 밋밋해 보여요."]:["good","무채색끼리라 깔끔하고, 밝기 차이로 정돈돼 보여요."];
   return dl<.12?["avoid","밝기가 비슷해 구분이 흐려져요. 신발이나 양말로 대비를 주면 좋아요."]:["good","무채색이 색을 차분하게 받쳐줘서 실패가 적어요."];}
@@ -223,27 +228,27 @@ const PCH={spring:"밝고 화사한 따뜻한 색",summer:"연하고 부드러�
 const T4=(g,b,sub)=>({g:L(g),b:L(b),sub:Object.fromEntries(Object.entries(sub).map(([k,v])=>[k,{g:L(v[0]),b:L(v[1])}]))});
 const PC={
  spring:T4("cream beige camel mustard terra pink","black charcoal gray navy burgundy lav",{
-  warm:["camel mustard terra cream beige","black charcoal gray navy burgundy lav sky"],
+  warm:["camel mustard terra cream beige","black charcoal gray navy burgundy lav sky ice"],
   clear:["mustard terra red pink green cream","charcoal gray khaki olive brown burgundy"],
   light:["cream beige pink sky white","black charcoal burgundy brown olive navy"],
   soft:["beige camel cream terra khaki pink","black navy charcoal red lav"]}),
- summer:T4("sky lav pink gray denim white","mustard terra camel olive khaki brown",{
-  cool:["navy sky lav pink gray white denim","mustard terra camel olive khaki brown"],
-  soft:["gray lav pink sky denim charcoal","mustard terra red black camel"],
-  light:["sky lav pink white gray","black charcoal brown burgundy mustard terra olive khaki"],
+ summer:T4("sky lav pink gray denim white ice","mustard terra camel olive khaki brown",{
+  cool:["navy sky lav pink gray white denim ice","mustard terra camel olive khaki brown"],
+  soft:["gray lav pink sky denim charcoal ice","mustard terra red black camel"],
+  light:["sky lav pink white gray ice","black charcoal brown burgundy mustard terra olive khaki"],
   dark:["navy charcoal burgundy denim gray green","mustard terra camel cream pink khaki"]}),
- autumn:T4("brown camel khaki olive mustard terra burgundy green beige cream","pink lav sky",{
-  warm:["camel mustard terra brown olive beige cream","pink lav sky gray black navy"],
-  soft:["beige camel khaki olive cream terra brown","black red pink lav navy white"],
-  dark:["brown burgundy green olive terra charcoal camel","pink lav sky white cream"],
-  clear:["terra red mustard green camel brown","gray lav sky khaki beige"]}),
- winter:T4("black white navy charcoal red burgundy gray green","beige cream camel mustard terra khaki olive brown",{
-  cool:["navy gray white sky lav pink denim black","beige cream camel mustard terra khaki olive brown"],
-  clear:["black white red navy pink sky green","beige cream camel khaki olive brown mustard terra"],
+ autumn:T4("brown camel khaki olive mustard terra burgundy green beige cream","pink lav sky ice",{
+  warm:["camel mustard terra brown olive beige cream","pink lav sky gray black navy ice"],
+  soft:["beige camel khaki olive cream terra brown","black red pink lav navy white ice"],
+  dark:["brown burgundy green olive terra charcoal camel","pink lav sky white cream ice"],
+  clear:["terra red mustard green camel brown","gray lav sky khaki beige ice"]}),
+ winter:T4("black white navy charcoal red burgundy gray green ice","beige cream camel mustard terra khaki olive brown",{
+  cool:["navy gray white sky lav pink denim black ice","beige cream camel mustard terra khaki olive brown"],
+  clear:["black white red navy pink sky green ice","beige cream camel khaki olive brown mustard terra"],
   dark:["black navy charcoal burgundy green white","cream camel mustard terra pink sky khaki"],
-  soft:["gray charcoal navy burgundy denim lav","mustard terra camel cream khaki beige"]})};
+  soft:["gray charcoal navy burgundy denim lav ice","mustard terra camel cream khaki beige"]})};
 let pcs="",pcu="";
-pcs="winter";pcu="soft";
+pcs="";pcu="";
 try{const raw=localStorage.getItem("pcs");if(raw!==null){const v=raw.split("|");pcs=PC[v[0]]?v[0]:"";pcu=pcs&&SUBS[pcs].includes(v[1])?v[1]:""}}catch(e){}
 function sv(){try{localStorage.setItem("pcs",pcs+"|"+pcu)}catch(x){}}
 function pcn(){return PCN[pcs]+(pcu?" · "+SUB[pcu]:"")}

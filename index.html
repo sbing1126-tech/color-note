@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>색조합 노트</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#eceef1;--card:#fff;--ink:#1d2026;--sub:#5d6470;--line:#d5d9df;--acc:#2b4cff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161a;--card:#1d2026;--ink:#eef0f3;--sub:#9aa2ae;--line:#32363e;--acc:#7f94ff}}
+:root[data-theme="dark"]{--bg:#14161a;--card:#1d2026;--ink:#eef0f3;--sub:#9aa2ae;--line:#32363e;--acc:#7f94ff}
+*{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.55}
+main{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:24px;margin:0 0 4px;letter-spacing:-.02em}
+.lead{margin:0 0 20px;color:var(--sub);font-size:14px}
+h2{font-size:15px;margin:26px 0 10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;color:var(--sub);padding:9px 14px;font:inherit;font-size:14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);font-weight:600}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:10px}
+.chip{border:0;background:none;padding:0;font:inherit;color:var(--ink);cursor:pointer;text-align:center}
+.chip i{display:block;aspect-ratio:1;border-radius:14px;border:1px solid rgba(128,128,128,.35);margin-bottom:5px}
+.chip span{font-size:12px}
+.chip[aria-pressed="true"] i{outline:3px solid var(--acc);outline-offset:2px}
+.chip[aria-pressed="true"] span{font-weight:700}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.stage{display:flex;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:22px}
+.stage svg{width:104px;height:auto;flex:none}
+.stage p{margin:0;font-size:14px;color:var(--sub)}
+.stage b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+.list{display:grid;gap:8px}
+.row{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer}
+.row[aria-pressed="true"]{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.row i{width:40px;height:40px;border-radius:10px;flex:none;border:1px solid rgba(128,128,128,.35)}
+.row strong{display:block;font-size:14px}
+.row small{color:var(--sub);font-size:13px;line-height:1.4;display:block}
+.badge{display:inline-block;font-style:normal;font-size:12px;font-weight:600;border-radius:99px;padding:1px 10px;margin-bottom:6px;color:#fff}
+.badge.good{background:#2a8a55}.badge.point{background:#b8741a}.badge.ok{background:#5d6470}.badge.avoid{background:#c0392b}
+.stage p{display:block}.stage span{display:block}
+.pcs{flex-wrap:wrap}.pcs:empty{display:none}.pcs+.pcs{margin-top:8px}.pcs button{padding:8px 12px}
+.chip{position:relative}
+.pc{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;font-size:12px;font-weight:700;line-height:20px;text-align:center;color:#fff}
+.pc.g{background:#2a8a55}.pc.o{background:#5d6470}.pc.b{background:#c0392b}
+.pci{display:inline-block;font-size:11px;font-weight:600;border-radius:99px;padding:0 7px;margin-left:6px;color:#fff;vertical-align:1px}
+.pci.g{background:#2a8a55}.pci.o{background:#5d6470}.pci.b{background:#c0392b}
+.stage small{display:block;margin-top:8px;font-size:13px;color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.outfit{display:flex;gap:16px;align-items:center}
+.outfit svg{width:112px;height:auto;flex:none}
+.sel{flex:1;display:grid;gap:10px;min-width:0}
+.pick{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 11px;cursor:pointer}
+.pick[aria-expanded="true"]{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.pick i{width:30px;height:30px;border-radius:8px;flex:none;border:1px solid rgba(128,128,128,.35)}
+.pick span{flex:1;min-width:0}.pick small{display:block;font-size:12px;color:var(--sub)}.pick b{font-size:15px}
+.chev{text-decoration:none;font-size:11px;color:var(--sub)}
+.pick[aria-expanded="true"] .chev,details[open] summary::after{transform:rotate(180deg)}
+.panel,.verdict{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.panel[hidden]{display:none}.panel{max-height:58vh;overflow-y:auto}.panel .chips{grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:10px 8px;align-items:start}.panel .chip span{font-size:11px;line-height:1.25;display:block;word-break:keep-all}.panel .chip i{border-radius:10px;margin-bottom:4px}.panel .pc{width:16px;height:16px;line-height:16px;font-size:10px;top:2px;right:2px}.gl{font-size:12px;font-weight:600;color:var(--sub);margin:12px 0 6px}.gl:first-child{margin-top:0}
+.verdict b{display:block;font-size:17px;margin-bottom:4px}
+.verdict p{margin:0;font-size:14px;color:var(--sub)}
+.verdict small{display:block;margin-top:8px;font-size:13px}
+details{margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+summary{padding:12px 14px;font-size:14px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"▼";font-size:11px;color:var(--sub)}
+details .list{padding:0 10px 10px}
+.tag{font-size:12px;color:var(--sub);margin:12px 0 18px}
+@media (prefers-reduced-motion:no-preference){.row,.chip i{transition:box-shadow .15s,outline-offset .15s}}
+</style>
+</head>
+<body>
+<main>
+  <h1>색조합 노트</h1>
+  <p class="lead">상의와 하의 색을 골라 어울리는지 확인해 보세요.</p>
+
+  <h2 style="margin-top:0">퍼스널 컬러</h2>
+  <div class="seg pcs" id="pcseg" role="group" aria-label="퍼스널 컬러 선택"></div>
+  <div class="seg pcs" id="pcsub" role="group" aria-label="세부 타입 선택"></div>
+  <p class="tag" id="pchint"></p>
+
+  <section class="card">
+    <div class="outfit">
+      <svg viewBox="0 0 104 168" aria-hidden="true">
+        <path id="pTop" d="M30 8 L44 4 Q52 14 60 4 L74 8 L98 34 L84 50 L74 42 L74 84 L30 84 L30 42 L20 50 L6 34 Z"/>
+        <path id="pBot" d="M30 88 L74 88 L78 162 L58 162 L52 112 L46 162 L26 162 Z"/>
+      </svg>
+      <div class="sel">
+        <button class="pick" id="sTop" aria-expanded="false" aria-controls="panel"><i id="iTop"></i><span><small>상의</small><b id="nTop"></b></span><u class="chev">▼</u></button>
+        <button class="pick" id="sBot" aria-expanded="false" aria-controls="panel"><i id="iBot"></i><span><small>하의</small><b id="nBot"></b></span><u class="chev">▼</u></button>
+      </div>
+    </div>
+    <div class="panel" id="panel" hidden>
+      <div id="all"></div>
+    </div>
+    <div class="verdict" aria-live="polite">
+      <b id="pt">-</b><em id="pv" class="badge">-</em>
+      <p id="pd">-</p>
+      <small id="pcl"></small>
+    </div>
+  </section>
+
+  <h2>이 색에는 뭐가 어울릴까?</h2>
+  <div class="seg" role="group" aria-label="추천 기준 선택">
+    <button id="m-top" aria-pressed="true">상의 기준</button>
+    <button id="m-bottom" aria-pressed="false">하의 기준</button>
+  </div>
+  <details><summary id="s1">-</summary><div class="list" id="safe"></div></details>
+  <details><summary id="s2">-</summary><div class="list" id="point"></div></details>
+  <details><summary id="s3">-</summary><div class="list" id="avoid"></div></details>
+</main>
+
+<script>
+const C={
+black:["블랙","#1c1c1e"],white:["화이트","#f6f4ee"],gray:["그레이","#8e9096"],charcoal:["차콜","#3d4047"],
+navy:["네이비","#1f2b4d"],beige:["베이지","#d8c3a5"],brown:["브라운","#7a5230"],khaki:["카키","#7d7a4f"],
+burgundy:["버건디","#6e1f2f"],denim:["데님","#4a6fa5"],red:["레드","#c0392b"],mustard:["머스타드","#d4a017"],
+pink:["핑크","#e8a0b4"],cream:["크림","#efe6d2"],olive:["올리브","#5b6236"],sky:["연청","#a9c4de"],
+camel:["카멜","#b98a55"],green:["포레스트 그린","#2f5d46"],terra:["테라코타","#c2693f"],lav:["라벤더","#b7a6d6"],
+lgray:["라이트그레이","#c9ccd1"],ivory:["아이보리","#f3eedf"],sand:["샌드","#cdb892"],taupe:["토프","#8b7b6e"],cocoa:["코코아","#9a6b4e"],dbrown:["다크브라운","#4a2f1d"],
+ice:["아이스블루","#d6e6f2"],cobalt:["코발트","#2f55b8"],mint:["민트","#a8d5c2"],sage:["세이지","#9fae96"],teal:["틸","#2c7a7b"],
+blush:["블러시","#f3cfd3"],rose:["로즈","#c46f86"],fuchsia:["푸시아","#c2287d"],coral:["코랄","#ef7d6a"],plum:["플럼","#5e2a4e"],
+lemon:["레몬","#f2dc63"],peach:["피치","#f5c2a0"],orange:["오렌지","#e8853a"],mauve:["모브","#a58698"],purple:["퍼플","#6b4a8f"]};
+const F={lgray:"gray",ivory:"cream",sand:"beige",taupe:"beige",cocoa:"brown",dbrown:"brown",ice:"sky",cobalt:"denim",mint:"green",sage:"olive",teal:"green",blush:"pink",rose:"pink",fuchsia:"pink",coral:"terra",plum:"burgundy",lemon:"mustard",peach:"terra",orange:"terra",mauve:"lav",purple:"lav"};
+const fam=k=>F[k]||k;
+const GRP=[["무채색","black charcoal gray lgray white ivory"],["베이지·브라운","cream sand beige taupe camel cocoa brown dbrown"],["블루","ice sky denim cobalt navy"],["그린","mint sage olive khaki green teal"],["레드·핑크","blush pink rose fuchsia coral red burgundy plum"],["옐로·오렌지","lemon mustard peach orange terra"],["퍼플","lav mauve purple"]];
+
+// 각 항목: [색, 한 줄 이유]
+const D={
+brown:{
+ safe:[["cream","같은 따뜻한 계열이라 부드럽고 고급스러워 보여요."],["beige","톤온톤으로 차분하게 정돈된 느낌이에요."],["sky","갈색과 파랑은 반대 계열이라 캐주얼하게 균형이 잡혀요."],["white","깔끔하게 받쳐줘서 갈색이 돋보여요."]],
+ point:[["green","어스톤끼리 만나 자연스러운 가을 분위기가 나요."],["burgundy","깊은 와인색과 겹쳐 무게감 있는 조합이에요."]],
+ avoid:[["black","둘 다 어두워 경계가 묻히고 답답해 보일 수 있어요. 밝은 신발이나 양말로 풀면 괜찮아요."],["navy","어두운 톤끼리라 칙칙해 보이기 쉬워요."]]},
+black:{
+ safe:[["white","가장 선명하고 실패 없는 대비예요."],["gray","무채색끼리라 깔끔하고 모던해요."],["denim","캐주얼하게 무게를 덜어줘요."],["beige","따뜻한 느낌이 더해져 부드러워져요."]],
+ point:[["red","강한 포인트가 되어 시선을 모아줘요."],["lav","어두운 색 위에 은은한 화사함을 더해요."]],
+ avoid:[["navy","둘이 비슷해 어색한 대비가 생길 수 있어요."],["brown","어두운 톤끼리 겹쳐 답답할 수 있어요."]]},
+white:{
+ safe:[["navy","단정하고 신뢰감 있는 기본 조합이에요."],["denim","청량하고 편안한 데일리 룩이에요."],["beige","밝은 톤온톤으로 부드러워요."],["black","대비가 또렷하고 세련돼요."]],
+ point:[["green","흰색 위에서 색이 깨끗하게 살아나요."],["terra","따뜻한 포인트가 눈에 띄어요."]],
+ avoid:[["cream","미묘하게 달라 때 탄 것처럼 보일 수 있어요."],["pink","너무 연해 흐릿해 보일 수 있어요."]]},
+gray:{
+ safe:[["black","무채색 조합이라 도시적이에요."],["navy","차분하고 단정한 오피스 룩이에요."],["white","밝고 깨끗하게 받쳐줘요."],["denim","부담 없는 캐주얼이에요."]],
+ point:[["burgundy","회색이 깊은 색을 돋보이게 해요."],["mustard","칙칙함을 덜어주는 따뜻한 포인트예요."]],
+ avoid:[["khaki","둘 다 탁해 존재감이 약해질 수 있어요."],["charcoal","명도 차이가 작아 밋밋해요."]]},
+navy:{
+ safe:[["white","깔끔한 정석 조합이에요."],["beige","부드럽고 세련된 대비예요."],["gray","차분하게 정리돼요."],["cream","따뜻한 느낌이 더해져요."]],
+ point:[["camel","고급스러운 클래식 조합이에요."],["mustard","선명한 포인트가 돼요."]],
+ avoid:[["black","비슷한 어두움이라 구분이 흐려져요."],["brown","칙칙해 보이기 쉬워요."]]},
+beige:{
+ safe:[["white","밝고 깨끗한 톤온톤이에요."],["brown","같은 계열이라 고급스러워요."],["navy","차분한 대비가 안정감을 줘요."],["olive","자연스러운 어스톤 조합이에요."]],
+ point:[["burgundy","따뜻한 베이지 위에서 깊게 돋보여요."],["sky","시원한 색이 포인트가 돼요."]],
+ avoid:[["pink","같은 연한 톤이라 밋밋해요."],["mustard","톤이 비슷해 탁해 보일 수 있어요."]]},
+khaki:{
+ safe:[["white","탁한 카키를 환하게 정리해줘요."],["beige","어스톤 톤온톤이에요."],["black","단단하고 시크해져요."],["denim","캐주얼한 아웃도어 느낌이에요."]],
+ point:[["mustard","가을 느낌의 따뜻한 포인트예요."],["burgundy","깊이 있는 가을 조합이에요."]],
+ avoid:[["green","비슷한 계열이라 구분이 안 돼요."],["gray","탁한 색끼리라 활기가 없어요."]]},
+burgundy:{
+ safe:[["black","묵직하고 세련돼요."],["gray","깊은 색을 차분하게 받쳐줘요."],["cream","따뜻한 대비가 부드러워요."],["denim","캐주얼하게 풀어줘요."]],
+ point:[["green","보색 느낌으로 고급스러운 포인트예요."],["camel","따뜻한 가을 조합이에요."]],
+ avoid:[["red","비슷한 붉은색끼리 부딪혀요."],["navy","어두운 색끼리 무거워요."]]},
+denim:{
+ safe:[["white","시원하고 깔끔해요."],["gray","차분한 데일리예요."],["beige","부드럽게 어울려요."],["black","캐주얼하면서 단정해요."]],
+ point:[["mustard","파랑과 노랑 대비가 선명해요."],["terra","청색과 따뜻한 색의 대비가 좋아요."]],
+ avoid:[["navy","톤 차이가 애매해 어색할 수 있어요."],["sky","같은 푸른 계열이 겹쳐 흐려 보여요."]]},
+red:{
+ safe:[["black","강렬하면서 정돈돼요."],["white","선명하고 깨끗해요."],["denim","캐주얼하게 눌러줘요."],["gray","차분하게 받쳐줘요."]],
+ point:[["navy","클래식하고 대비가 좋아요."]],
+ avoid:[["pink","붉은 계열끼리 부딪힐 수 있어요."],["green","크리스마스 같은 느낌이 강해져요."],["terra","비슷한 따뜻한 색이 겹쳐요."]]},
+mustard:{
+ safe:[["navy","노랑과 남색의 정석 대비예요."],["white","밝게 정리돼요."],["denim","캐주얼해요."],["brown","따뜻한 가을 조합이에요."]],
+ point:[["burgundy","깊은 색과 어울려요."],["lav","보색 느낌의 포인트예요."]],
+ avoid:[["khaki","탁한 노랑·초록끼리라 칙칙해요."],["red","강한 색끼리 부딪혀요."]]},
+pink:{
+ safe:[["white","부드럽고 깨끗해요."],["gray","차분하게 눌러줘요."],["denim","편안한 캐주얼이에요."],["cream","따뜻하고 은은해요."]],
+ point:[["olive","차분한 초록이 핑크를 세련되게 해요."],["navy","대비가 또렷해요."]],
+ avoid:[["red","붉은 계열끼리 시끄러워요."],["mustard","톤이 달라 어수선해 보일 수 있어요."]]}
+};
+
+const base=Object.keys(C);
+const LB={good:"잘 어울려요",point:"포인트로 좋아요",ok:"무난해요",avoid:"조심해요"};
+let T="brown",B="gray",mode="top",open=null;
+const $=id=>document.getElementById(id);
+
+function hsl(x){const r=parseInt(x.slice(1,3),16)/255,g=parseInt(x.slice(3,5),16)/255,b=parseInt(x.slice(5,7),16)/255;
+ const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn;let h=0;
+ if(d){if(mx===r)h=((g-b)/d)%6;else if(mx===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60;if(h<0)h+=360}
+ return[h,d,l]}
+function guess(a,b){
+ if(a===b)return["avoid","같은 색이라 위아래 구분이 안 돼 밋밋해요."];
+ const[h1,c1,l1]=hsl(C[a][1]),[h2,c2,l2]=hsl(C[b][1]);
+ const dl=Math.abs(l1-l2),dh=Math.min(Math.abs(h1-h2),360-Math.abs(h1-h2));
+ if(c1<.12||c2<.12){
+  if(c1<.12&&c2<.12)return dl<.15?["avoid","무채색끼리 밝기도 비슷해 밋밋해 보여요."]:["good","무채색끼리라 깔끔하고, 밝기 차이로 정돈돼 보여요."];
+  return dl<.12?["avoid","밝기가 비슷해 구분이 흐려져요. 신발이나 양말로 대비를 주면 좋아요."]:["good","무채색이 색을 차분하게 받쳐줘서 실패가 적어요."];}
+ if(dh<35)return dl>=.18?["good","같은 계열이라 밝기 차이로 톤온톤을 연출할 수 있어요."]:["avoid","비슷한 색에 밝기도 비슷해 칙칙하거나 밋밋해 보여요."];
+ if(dl<.1)return["avoid","밝기가 비슷해 경계가 흐려져요."];
+ if(dh>=150)return["point","반대 계열이라 대비가 강해요. 한쪽을 어둡거나 연한 톤으로 낮추면 세련돼요."];
+ return["ok","무난하게 입을 수 있어요. 한쪽을 중간 톤으로 맞추면 더 안정적이에요."];}
+function judge(a,p){
+ const fa=fam(a),fp=fam(p),d=fa!==fp&&D[fa];
+ if(d)for(const[lv,key]of[["good","safe"],["point","point"],["avoid","avoid"]]){const f=d[key].find(x=>x[0]===fp);if(f)return[lv,f[1]]}
+ return guess(a,p);}
+function lists(k){
+ const f=fam(k);if(D[f])return D[f];
+ const o=base.filter(x=>fam(x)===x&&x!==f).map(x=>[x,...judge(f,x)]);
+ const by=lv=>o.filter(x=>x[1]===lv).map(x=>[x[0],x[2]]);
+ return{safe:by("good").slice(0,4),point:by("point").slice(0,2),avoid:by("avoid").slice(0,2)};}
+
+const L=x=>x.split(" ");
+const PCN={spring:"봄웜",summer:"여름쿨",autumn:"가을웜",winter:"겨울쿨"};
+const SUB={warm:"웜",cool:"쿨",clear:"클리어",light:"라이트",soft:"소프트",dark:"다크"};
+const SD={warm:"노란기가 도는 따뜻한 색",cool:"푸른기가 도는 시원한 색",clear:"선명하고 맑은 색",light:"밝고 연한 색",soft:"부드럽고 차분한 색",dark:"깊고 어두운 색"};
+const SUBS={spring:["warm","clear","light","soft"],summer:["cool","soft","light","dark"],autumn:["warm","soft","dark","clear"],winter:["cool","clear","dark","soft"]};
+const PCH={spring:"밝고 화사한 따뜻한 색",summer:"연하고 부드러운 차가운 색",autumn:"깊고 차분한 따뜻한 색",winter:"선명하고 대비 강한 차가운 색"};
+const T4=(g,b,sub)=>({g:L(g),b:L(b),sub:Object.fromEntries(Object.entries(sub).map(([k,v])=>[k,{g:L(v[0]),b:L(v[1])}]))});
+const PC={
+ spring:T4("cream beige camel mustard terra pink","black charcoal gray navy burgundy lav",{
+  warm:["camel mustard terra cream beige","black charcoal gray navy burgundy lav sky"],
+  clear:["mustard terra red pink green cream","charcoal gray khaki olive brown burgundy"],
+  light:["cream beige pink sky white","black charcoal burgundy brown olive navy"],
+  soft:["beige camel cream terra khaki pink","black navy charcoal red lav"]}),
+ summer:T4("sky lav pink gray denim white","mustard terra camel olive khaki brown",{
+  cool:["navy sky lav pink gray white denim","mustard terra camel olive khaki brown"],
+  soft:["gray lav pink sky denim charcoal","mustard terra red black camel"],
+  light:["sky lav pink white gray","black charcoal brown burgundy mustard terra olive khaki"],
+  dark:["navy charcoal burgundy denim gray green","mustard terra camel cream pink khaki"]}),
+ autumn:T4("brown camel khaki olive mustard terra burgundy green beige cream","pink lav sky",{
+  warm:["camel mustard terra brown olive beige cream","pink lav sky gray black navy"],
+  soft:["beige camel khaki olive cream terra brown","black red pink lav navy white"],
+  dark:["brown burgundy green olive terra charcoal camel","pink lav sky white cream"],
+  clear:["terra red mustard green camel brown","gray lav sky khaki beige"]}),
+ winter:T4("black white navy charcoal red burgundy gray green","beige cream camel mustard terra khaki olive brown",{
+  cool:["navy gray white sky lav pink denim black","beige cream camel mustard terra khaki olive brown"],
+  clear:["black white red navy pink sky green","beige cream camel khaki olive brown mustard terra"],
+  dark:["black navy charcoal burgundy green white","cream camel mustard terra pink sky khaki"],
+  soft:["gray charcoal navy burgundy denim lav","mustard terra camel cream khaki beige"]})};
+let pcs="",pcu="";
+pcs="winter";pcu="soft";
+try{const raw=localStorage.getItem("pcs");if(raw!==null){const v=raw.split("|");pcs=PC[v[0]]?v[0]:"";pcu=pcs&&SUBS[pcs].includes(v[1])?v[1]:""}}catch(e){}
+function sv(){try{localStorage.setItem("pcs",pcs+"|"+pcu)}catch(x){}}
+function pcn(){return PCN[pcs]+(pcu?" · "+SUB[pcu]:"")}
+function pcLv(k){if(!pcs)return null;const m=(pcu&&PC[pcs].sub[pcu])||PC[pcs],f=fam(k);return m.g.includes(f)?"g":m.b.includes(f)?"b":"o"}
+const PCT={g:"추천",o:"무난",b:"비추"},PCS={g:"○",o:"△",b:"✕"};
+function mk(k,inline){const l=pcLv(k);if(!l)return"";return inline?`<span class="pci ${l}">${PCT[l]}</span>`:`<span class="pc ${l}" aria-label="${PCT[l]}">${PCS[l]}</span>`}
+function pcButtons(){
+ $("pcseg").innerHTML=[["","선택 안 함"],...Object.entries(PCN)].map(([k,n])=>`<button data-pc="${k}" aria-pressed="${k===pcs}">${n}</button>`).join("");
+ $("pcsub").innerHTML=pcs?[["","전체"],...SUBS[pcs].map(k=>[k,SUB[k]])].map(([k,n])=>`<button data-pu="${k}" aria-pressed="${k===pcu}">${n}</button>`).join(""):"";
+ $("pchint").textContent=!pcs?"퍼스널 컬러를 고르면 각 색에 추천 여부가 표시돼요.":`${pcn()}: ${pcu?SD[pcu]:PCH[pcs]}이 잘 맞아요. 색 위에 ○ 추천, △ 무난, ✕ 비추가 표시돼요.`;}
+function rows(id,list,sel){
+ $(id).innerHTML=list.map(([k,t])=>`<button class="row" data-r="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i><span><strong>${C[k][0]}${mk(k,1)}</strong><small>${t}</small></span></button>`).join("");}
+function render(){
+ const base=mode==="top"?T:B,other=mode==="top"?B:T,pn=mode==="top"?"하의":"상의";
+ const d=lists(base);
+ $("pTop").setAttribute("fill",C[T][1]);$("pBot").setAttribute("fill",C[B][1]);
+ $("iTop").style.background=C[T][1];$("iBot").style.background=C[B][1];
+ $("nTop").innerHTML=C[T][0]+mk(T,1);$("nBot").innerHTML=C[B][0]+mk(B,1);
+ $("sTop").setAttribute("aria-expanded",open==="top");$("sBot").setAttribute("aria-expanded",open==="bottom");
+ const panel=$("panel");panel.hidden=!open;
+ if(open){const sel=open==="top"?T:B;
+  $("all").innerHTML=GRP.map(([n,ks])=>`<div class="gl">${n}</div><div class="chips">`+ks.split(" ").map(k=>`<button class="chip" data-c="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i>${mk(k)}<span>${C[k][0]}</span></button>`).join("")+`</div>`).join("");}
+ const[lv,why]=judge(base,other);
+ $("pt").textContent=`상의 ${C[T][0]} + 하의 ${C[B][0]}`;
+ const v=$("pv");v.textContent=LB[lv];v.className="badge "+lv;
+ $("pd").textContent=why;
+ $("pcl").textContent=pcs?`${pcn()} 기준 · 상의 ${C[T][0]} ${PCT[pcLv(T)]} / 하의 ${C[B][0]} ${PCT[pcLv(B)]}. 얼굴 가까이 오는 상의 색이 더 중요해요.`:"";
+ pcButtons();
+ $("s1").textContent=`${pn}는 이 색이 잘 어울려요 (${d.safe.length})`;
+ $("s2").textContent=`포인트로 좋아요 (${d.point.length})`;
+ $("s3").textContent=`조심하면 좋아요 (${d.avoid.length})`;
+ rows("safe",d.safe,other);rows("point",d.point,other);rows("avoid",d.avoid,other);
+ $("m-top").setAttribute("aria-pressed",mode==="top");$("m-bottom").setAttribute("aria-pressed",mode==="bottom");}
+function base0(){return base}
+document.addEventListener("click",e=>{
+ const q=e.target.closest("[data-pc]"),u=e.target.closest("[data-pu]"),c=e.target.closest("[data-c]"),r=e.target.closest("[data-r]");
+ if(q){pcs=q.dataset.pc;pcu="";sv()}
+ else if(u){pcu=u.dataset.pu;sv()}
+ else if(c){if(open==="top")T=c.dataset.c;else B=c.dataset.c;open=null}
+ else if(r){if(mode==="top")B=r.dataset.r;else T=r.dataset.r;window.scrollTo({top:0,behavior:"smooth"})}
+ else return;
+ render()});
+$("sTop").onclick=()=>{open=open==="top"?null:"top";render()};
+$("sBot").onclick=()=>{open=open==="bottom"?null:"bottom";render()};
+$("m-top").onclick=()=>{mode="top";render()};
+$("m-bottom").onclick=()=>{mode="bottom";render()};
+render();
+</script>
+</body>
+</html>

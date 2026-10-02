@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="색조합">
+<meta name="theme-color" content="#eceef1">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>색조합 노트</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap">
 <style>
@@ -285,6 +291,7 @@ $("sBot").onclick=()=>{open=open==="bottom"?null:"bottom";render()};
 $("m-top").onclick=()=>{mode="top";render()};
 $("m-bottom").onclick=()=>{mode="bottom";render()};
 render();
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}
 </script>
 </body>
 </html>

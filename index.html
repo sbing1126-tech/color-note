@@ -72,6 +72,8 @@ summary{padding:12px 14px;font-size:14px;font-weight:600;cursor:pointer;list-sty
 summary::-webkit-details-marker{display:none}
 summary::after{content:"▼";font-size:11px;color:var(--sub)}
 details .list{padding:0 10px 10px}
+.ssn{margin-top:14px}.ssn button{padding:8px 12px}
+.pin{display:block;margin-top:10px;text-align:center;padding:12px;border-radius:12px;background:#e60023;color:#fff;text-decoration:none;font-weight:600;font-size:14px}
 .tag{font-size:12px;color:var(--sub);margin:12px 0 18px}
 @media (prefers-reduced-motion:no-preference){.row,.chip i{transition:box-shadow .15s,outline-offset .15s}}
 </style>
@@ -105,6 +107,8 @@ details .list{padding:0 10px 10px}
       <p id="pd">-</p>
       <small id="pcl"></small>
     </div>
+    <div class="seg ssn" id="ssn" role="group" aria-label="코디 계절"></div>
+    <a class="pin" id="pin" target="_blank" rel="noopener">핀터레스트에서 코디 보기</a>
   </section>
 
   <h2>이 색에는 뭐가 어울릴까?</h2>
@@ -130,6 +134,8 @@ blush:["블러시","#f3cfd3"],rose:["로즈","#c46f86"],fuchsia:["푸시아","#c
 lemon:["레몬","#f2dc63"],peach:["피치","#f5c2a0"],orange:["오렌지","#e8853a"],mauve:["모브","#a58698"],purple:["퍼플","#6b4a8f"]};
 const F={lgray:"gray",ivory:"cream",sand:"beige",taupe:"beige",cocoa:"brown",dbrown:"brown",icepink:"ice",icelav:"ice",icemint:"ice",iceyellow:"ice",cobalt:"denim",mint:"green",sage:"olive",teal:"green",blush:"pink",rose:"pink",fuchsia:"pink",coral:"terra",plum:"burgundy",lemon:"mustard",peach:"terra",orange:"terra",mauve:"lav",purple:"lav"};
 const fam=k=>F[k]||k;
+const EN={black:"black",white:"white",gray:"gray",charcoal:"charcoal",navy:"navy",beige:"beige",brown:"brown",khaki:"khaki",burgundy:"burgundy",denim:"denim blue",red:"red",mustard:"mustard",pink:"pink",cream:"cream",olive:"olive green",sky:"light blue",camel:"camel",green:"forest green",terra:"terracotta",lav:"lavender",lgray:"light gray",ivory:"ivory",sand:"sand beige",taupe:"taupe",cocoa:"cocoa brown",dbrown:"dark brown",ice:"icy blue",cobalt:"cobalt blue",mint:"mint green",sage:"sage green",teal:"teal",blush:"blush pink",rose:"rose pink",fuchsia:"fuchsia",coral:"coral",plum:"plum",lemon:"lemon yellow",peach:"peach",orange:"orange",mauve:"mauve",purple:"purple",icepink:"icy pink",icelav:"icy lavender",icemint:"icy mint",iceyellow:"icy yellow"};
+let ssv="sf";
 const GRP=[["무채색","black charcoal gray lgray white ivory"],["아이시 (아주 연한 색)","ice icepink icelav icemint iceyellow"],["베이지·브라운","cream sand beige taupe camel cocoa brown dbrown"],["블루","sky denim cobalt navy"],["그린","mint sage olive khaki green teal"],["레드·핑크","blush pink rose fuchsia coral red burgundy plum"],["옐로·오렌지","lemon mustard peach orange terra"],["퍼플","lav mauve purple"]];
 
 // 각 항목: [색, 한 줄 이유]
@@ -275,6 +281,9 @@ function render(){
  $("pt").textContent=`상의 ${C[T][0]} + 하의 ${C[B][0]}`;
  const v=$("pv");v.textContent=LB[lv];v.className="badge "+lv;
  $("pd").textContent=why;
+ const W={sf:["shirt","spring fall"],su:["t-shirt","summer"],wi:["knit","winter"]}[ssv];
+ $("ssn").innerHTML=[["sf","봄·가을"],["su","여름"],["wi","겨울"]].map(([k,n])=>`<button data-ss="${k}" aria-pressed="${k===ssv}">${n}</button>`).join("");
+ $("pin").href="https://www.pinterest.com/search/pins/?q="+encodeURIComponent((EN[T]||T)+" "+W[0]+" "+(EN[B]||B)+" pants outfit "+W[1]);
  $("pcl").textContent=pcs?`${pcn()} 기준 · 상의 ${C[T][0]}: ${PCT[pcLv(T)]}. 얼굴 가까이 오는 상의 색만 기준으로 봐요.`:"";
  pcButtons();
  $("s1").textContent=`${pn}는 이 색이 잘 어울려요 (${d.safe.length})`;
@@ -284,8 +293,9 @@ function render(){
  $("m-top").setAttribute("aria-pressed",mode==="top");$("m-bottom").setAttribute("aria-pressed",mode==="bottom");}
 function base0(){return base}
 document.addEventListener("click",e=>{
- const q=e.target.closest("[data-pc]"),u=e.target.closest("[data-pu]"),c=e.target.closest("[data-c]"),r=e.target.closest("[data-r]");
- if(q){pcs=q.dataset.pc;pcu="";sv()}
+ const ss=e.target.closest("[data-ss]"),q=e.target.closest("[data-pc]"),u=e.target.closest("[data-pu]"),c=e.target.closest("[data-c]"),r=e.target.closest("[data-r]");
+ if(ss){ssv=ss.dataset.ss}
+ else if(q){pcs=q.dataset.pc;pcu="";sv()}
  else if(u){pcu=u.dataset.pu;sv()}
  else if(c){if(open==="top")T=c.dataset.c;else B=c.dataset.c;open=null}
  else if(r){if(mode==="top")B=r.dataset.r;else T=r.dataset.r;window.scrollTo({top:0,behavior:"smooth"})}

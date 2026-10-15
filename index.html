@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="색조합">
+<meta name="apple-mobile-web-app-title" content="Color Note">
 <meta name="theme-color" content="#eceef1">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -64,8 +64,8 @@ h2{font-size:15px;margin:26px 0 10px}
 .pick[aria-expanded="true"] .chev,details[open] summary::after{transform:rotate(180deg)}
 .panel,.verdict{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 .panel[hidden]{display:none}.panel{max-height:58vh;overflow-y:auto}.panel .chips{grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:10px 8px;align-items:start}.panel .chip span{font-size:11px;line-height:1.25;display:block;word-break:keep-all}.panel .chip i{border-radius:10px;margin-bottom:4px}.panel .pc{width:16px;height:16px;line-height:16px;font-size:10px;top:2px;right:2px}.gl{font-size:12px;font-weight:600;color:var(--sub);margin:12px 0 6px}.gl:first-child{margin-top:0}
-.verdict b{display:block;font-size:17px;margin-bottom:4px}
-.verdict p{margin:0;font-size:14px;color:var(--sub)}
+.verdict b{word-break:keep-all;display:block;font-size:17px;margin-bottom:4px}
+.verdict #pd{font-size:14px;color:var(--sub)}
 .verdict small{display:block;margin-top:8px;font-size:13px}
 details{margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:12px}
 summary{padding:12px 14px;font-size:14px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
@@ -74,6 +74,7 @@ summary::after{content:"▼";font-size:11px;color:var(--sub)}
 details .list{padding:0 10px 10px}
 .ssn{margin-top:14px}.ssn button{padding:8px 12px}
 .pin{display:block;margin-top:10px;text-align:center;padding:12px;border-radius:12px;background:#e60023;color:#fff;text-decoration:none;font-weight:600;font-size:14px}
+.prs{margin-top:12px}.pr{padding:9px 0;border-top:1px solid var(--line)}.pn{font-size:13px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pn .badge{margin:0;font-size:11px;padding:1px 9px}.pw{font-size:13px;color:var(--sub);margin-top:3px}#pv{font-size:14px;padding:3px 14px}
 .tag{font-size:12px;color:var(--sub);margin:12px 0 18px}
 @media (prefers-reduced-motion:no-preference){.row,.chip i{transition:box-shadow .15s,outline-offset .15s}}
 </style>
@@ -93,8 +94,11 @@ details .list{padding:0 10px 10px}
       <svg viewBox="0 0 104 168" aria-hidden="true">
         <path id="pTop" d="M30 8 L44 4 Q52 14 60 4 L74 8 L98 34 L84 50 L74 42 L74 84 L30 84 L30 42 L20 50 L6 34 Z"/>
         <path id="pBot" d="M30 88 L74 88 L78 162 L58 162 L52 112 L46 162 L26 162 Z"/>
+        <path id="pOut" d="M43 6 L25 11 L11 100 L23 102 L28 52 L27 124 L46 124 L46 40 Z" stroke="rgba(0,0,0,.3)" stroke-width="1" stroke-linejoin="round" display="none"/>
+        <path id="pOutL" d="M61 6 L79 11 L93 100 L81 102 L76 52 L77 124 L58 124 L58 40 Z" stroke="rgba(0,0,0,.3)" stroke-width="1" stroke-linejoin="round" display="none"/>
       </svg>
       <div class="sel">
+        <button class="pick" id="sOut" aria-expanded="false" aria-controls="panel"><i id="iOut"></i><span><small>아우터</small><b id="nOut"></b></span><u class="chev">▼</u></button>
         <button class="pick" id="sTop" aria-expanded="false" aria-controls="panel"><i id="iTop"></i><span><small>상의</small><b id="nTop"></b></span><u class="chev">▼</u></button>
         <button class="pick" id="sBot" aria-expanded="false" aria-controls="panel"><i id="iBot"></i><span><small>하의</small><b id="nBot"></b></span><u class="chev">▼</u></button>
       </div>
@@ -104,7 +108,7 @@ details .list{padding:0 10px 10px}
     </div>
     <div class="verdict" aria-live="polite">
       <b id="pt">-</b><em id="pv" class="badge">-</em>
-      <p id="pd">-</p>
+      <div id="pd">-</div>
       <small id="pcl"></small>
     </div>
     <div class="seg ssn" id="ssn" role="group" aria-label="코디 계절"></div>
@@ -115,6 +119,7 @@ details .list{padding:0 10px 10px}
   <div class="seg" role="group" aria-label="추천 기준 선택">
     <button id="m-top" aria-pressed="true">상의 기준</button>
     <button id="m-bottom" aria-pressed="false">하의 기준</button>
+    <button id="m-outer" aria-pressed="false" hidden>아우터 기준</button>
   </div>
   <details><summary id="s1">-</summary><div class="list" id="safe"></div></details>
   <details><summary id="s2">-</summary><div class="list" id="point"></div></details>
@@ -134,6 +139,7 @@ blush:["블러시","#f3cfd3"],rose:["로즈","#c46f86"],fuchsia:["푸시아","#c
 lemon:["레몬","#f2dc63"],peach:["피치","#f5c2a0"],orange:["오렌지","#e8853a"],mauve:["모브","#a58698"],purple:["퍼플","#6b4a8f"]};
 const F={lgray:"gray",ivory:"cream",sand:"beige",taupe:"beige",cocoa:"brown",dbrown:"brown",icepink:"ice",icelav:"ice",icemint:"ice",iceyellow:"ice",cobalt:"denim",mint:"green",sage:"olive",teal:"green",blush:"pink",rose:"pink",fuchsia:"pink",coral:"terra",plum:"burgundy",lemon:"mustard",peach:"terra",orange:"terra",mauve:"lav",purple:"lav"};
 const fam=k=>F[k]||k;
+
 const EN={black:"black",white:"white",gray:"gray",charcoal:"charcoal",navy:"navy",beige:"beige",brown:"brown",khaki:"khaki",burgundy:"burgundy",denim:"denim blue",red:"red",mustard:"mustard",pink:"pink",cream:"cream",olive:"olive green",sky:"light blue",camel:"camel",green:"forest green",terra:"terracotta",lav:"lavender",lgray:"light gray",ivory:"ivory",sand:"sand beige",taupe:"taupe",cocoa:"cocoa brown",dbrown:"dark brown",ice:"icy blue",cobalt:"cobalt blue",mint:"mint green",sage:"sage green",teal:"teal",blush:"blush pink",rose:"rose pink",fuchsia:"fuchsia",coral:"coral",plum:"plum",lemon:"lemon yellow",peach:"peach",orange:"orange",mauve:"mauve",purple:"purple",icepink:"icy pink",icelav:"icy lavender",icemint:"icy mint",iceyellow:"icy yellow"};
 let ssv="sf";
 const GRP=[["무채색","black charcoal gray lgray white ivory"],["아이시 (아주 연한 색)","ice icepink icelav icemint iceyellow"],["베이지·브라운","cream sand beige taupe camel cocoa brown dbrown"],["블루","sky denim cobalt navy"],["그린","mint sage olive khaki green teal"],["레드·핑크","blush pink rose fuchsia coral red burgundy plum"],["옐로·오렌지","lemon mustard peach orange terra"],["퍼플","lav mauve purple"]];
@@ -192,7 +198,7 @@ pink:{
 
 const base=Object.keys(C);
 const LB={good:"잘 어울려요",point:"포인트로 좋아요",ok:"무난해요",avoid:"조심해요"};
-let T="brown",B="gray",mode="top",open=null;
+let T="brown",B="gray",O=null,mode="top",open=null;
 const $=id=>document.getElementById(id);
 
 function hsl(x){const r=parseInt(x.slice(1,3),16)/255,g=parseInt(x.slice(3,5),16)/255,b=parseInt(x.slice(5,7),16)/255;
@@ -264,45 +270,57 @@ function mk(k,inline){const l=pcLv(k);if(!l)return"";return inline?`<span class=
 function pcButtons(){
  $("pcseg").innerHTML=[["","선택 안 함"],...Object.entries(PCN)].map(([k,n])=>`<button data-pc="${k}" aria-pressed="${k===pcs}">${n}</button>`).join("");
  $("pcsub").innerHTML=pcs?[["","전체"],...SUBS[pcs].map(k=>[k,SUB[k]])].map(([k,n])=>`<button data-pu="${k}" aria-pressed="${k===pcu}">${n}</button>`).join(""):"";
- $("pchint").textContent=!pcs?"퍼스널 컬러를 고르면 상의 색에 추천 여부가 표시돼요.":`${pcn()}: ${pcu?SD[pcu]:PCH[pcs]}이 잘 맞아요. 상의 색에만 ○ 추천, △ 무난, ✕ 비추가 표시돼요.`;}
+ $("pchint").textContent=!pcs?"퍼스널 컬러를 고르면 아우터·상의 색에 추천 여부가 표시돼요.":`${pcn()}: ${pcu?SD[pcu]:PCH[pcs]}이 잘 맞아요. 아우터·상의 색에만 ○ 추천, △ 무난, ✕ 비추가 표시돼요.`;}
 function rows(id,list,sel,show){
  $(id).innerHTML=list.map(([k,t])=>`<button class="row" data-r="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i><span><strong>${C[k][0]}${show?mk(k,1):""}</strong><small>${t}</small></span></button>`).join("");}
 function render(){
- const base=mode==="top"?T:B,other=mode==="top"?B:T,pn=mode==="top"?"하의":"상의";
+ if(mode==="outer"&&!O)mode="top";
+ const base=mode==="outer"?O:mode==="top"?T:B,other=mode==="top"?B:T,pn=mode==="top"?"하의":mode==="outer"?"이너(상의)":"상의";
  const d=lists(base);
  $("pTop").setAttribute("fill",C[T][1]);$("pBot").setAttribute("fill",C[B][1]);
+ $("pOut").setAttribute("display",O?"inline":"none");$("pOutL").setAttribute("display",O?"inline":"none");if(O){$("pOut").setAttribute("fill",C[O][1]);$("pOutL").setAttribute("fill",C[O][1])}
+ $("pTop").setAttribute("d",O?"M43 6 Q52 18 61 6 L74 10 L74 92 L30 92 L30 10 Z":"M30 8 L44 4 Q52 14 60 4 L74 8 L98 34 L84 50 L74 42 L74 84 L30 84 L30 42 L20 50 L6 34 Z");
  $("iTop").style.background=C[T][1];$("iBot").style.background=C[B][1];
+ $("iOut").style.background=O?C[O][1]:"transparent";$("nOut").innerHTML=O?C[O][0]+mk(O,1):"없음";
  $("nTop").innerHTML=C[T][0]+mk(T,1);$("nBot").textContent=C[B][0];
- $("sTop").setAttribute("aria-expanded",open==="top");$("sBot").setAttribute("aria-expanded",open==="bottom");
+ $("sOut").setAttribute("aria-expanded",open==="outer");$("sTop").setAttribute("aria-expanded",open==="top");$("sBot").setAttribute("aria-expanded",open==="bottom");
  const panel=$("panel");panel.hidden=!open;
- if(open){const sel=open==="top"?T:B;
-  $("all").innerHTML=GRP.map(([n,ks])=>`<div class="gl">${n}</div><div class="chips">`+ks.split(" ").map(k=>`<button class="chip" data-c="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i>${open==="top"?mk(k):""}<span>${C[k][0]}</span></button>`).join("")+`</div>`).join("");}
- const[lv,why]=judge(base,other);
- $("pt").textContent=`상의 ${C[T][0]} + 하의 ${C[B][0]}`;
- const v=$("pv");v.textContent=LB[lv];v.className="badge "+lv;
- $("pd").textContent=why;
+ if(open){const sel=open==="outer"?O:open==="top"?T:B;
+  $("all").innerHTML=(open==="outer"?'<div class="chips"><button class="chip" data-c="none" aria-pressed="'+!O+'"><i style="background:transparent"></i><span>없음</span></button></div>':"")+GRP.map(([n,ks])=>`<div class="gl">${n}</div><div class="chips">`+ks.split(" ").map(k=>`<button class="chip" data-c="${k}" aria-pressed="${k===sel}"><i style="background:${C[k][1]}"></i>${open!=="bottom"?mk(k):""}<span>${C[k][0]}</span></button>`).join("")+`</div>`).join("");}
+ const[l1,w1]=judge(T,B);
+ let lv=l1,pd=w1,title=`상의 ${C[T][0]} + 하의 ${C[B][0]}`;
+ if(O){const[l2,w2]=judge(O,T),[l3,w3]=judge(O,B),ls=[l1,l2,l3];
+  lv=ls.includes("avoid")?"avoid":ls.filter(x=>x==="good").length>=2?"good":ls.includes("point")?"point":"ok";
+  title=`아우터 ${C[O][0]} + 상의 ${C[T][0]} + 하의 ${C[B][0]}`;
+  const row=(n,l,w)=>`<div class="pr"><div class="pn">${n}<em class="badge ${l}">${LB[l]}</em></div><div class="pw">${w}</div></div>`;
+  pd='<div class="prs">'+row("아우터 + 상의",l2,w2)+row("아우터 + 하의",l3,w3)+row("상의 + 하의",l1,w1)+"</div>"}
+ $("pt").textContent=title;
+ const v=$("pv");v.textContent=(O?"종합 · ":"")+LB[lv];v.className="badge "+lv;
+ $("pd").innerHTML=pd;
  const W={sf:["shirt","spring fall"],su:["t-shirt","summer"],wi:["knit","winter"]}[ssv];
  $("ssn").innerHTML=[["sf","봄·가을"],["su","여름"],["wi","겨울"]].map(([k,n])=>`<button data-ss="${k}" aria-pressed="${k===ssv}">${n}</button>`).join("");
- $("pin").href="https://www.pinterest.com/search/pins/?q="+encodeURIComponent((EN[T]||T)+" "+W[0]+" "+(EN[B]||B)+" pants outfit "+W[1]);
- $("pcl").textContent=pcs?`${pcn()} 기준 · 상의 ${C[T][0]}: ${PCT[pcLv(T)]}. 얼굴 가까이 오는 상의 색만 기준으로 봐요.`:"";
+ $("pin").href="https://www.pinterest.com/search/pins/?q="+encodeURIComponent((O?[(EN[O]||O)+(ssv==="wi"?" coat":" jacket"),EN[T]||T,W[0],"outfit",W[1]]:[EN[T]||T,W[0],EN[B]||B,"pants outfit",W[1]]).filter(Boolean).join(" "));
+ $("pcl").textContent=pcs?(O?`${pcn()} 기준 · 아우터 ${C[O][0]}: ${PCT[pcLv(O)]} / 상의 ${C[T][0]}: ${PCT[pcLv(T)]}. 얼굴 가까이 오는 윗옷 색만 기준으로 봐요.`:`${pcn()} 기준 · 상의 ${C[T][0]}: ${PCT[pcLv(T)]}. 얼굴 가까이 오는 상의 색만 기준으로 봐요.`):"";
  pcButtons();
  $("s1").textContent=`${pn}는 이 색이 잘 어울려요 (${d.safe.length})`;
  $("s2").textContent=`포인트로 좋아요 (${d.point.length})`;
  $("s3").textContent=`조심하면 좋아요 (${d.avoid.length})`;
- const sp=mode==="bottom";rows("safe",d.safe,other,sp);rows("point",d.point,other,sp);rows("avoid",d.avoid,other,sp);
- $("m-top").setAttribute("aria-pressed",mode==="top");$("m-bottom").setAttribute("aria-pressed",mode==="bottom");}
+ const sp=mode!=="top";rows("safe",d.safe,other,sp);rows("point",d.point,other,sp);rows("avoid",d.avoid,other,sp);
+ $("m-outer").hidden=!O;$("m-outer").setAttribute("aria-pressed",mode==="outer");$("m-top").setAttribute("aria-pressed",mode==="top");$("m-bottom").setAttribute("aria-pressed",mode==="bottom");}
 function base0(){return base}
 document.addEventListener("click",e=>{
  const ss=e.target.closest("[data-ss]"),q=e.target.closest("[data-pc]"),u=e.target.closest("[data-pu]"),c=e.target.closest("[data-c]"),r=e.target.closest("[data-r]");
  if(ss){ssv=ss.dataset.ss}
  else if(q){pcs=q.dataset.pc;pcu="";sv()}
  else if(u){pcu=u.dataset.pu;sv()}
- else if(c){if(open==="top")T=c.dataset.c;else B=c.dataset.c;open=null}
+ else if(c){const k=c.dataset.c;if(open==="outer"){O=k==="none"?null:k;if(!O&&mode==="outer")mode="top"}else if(open==="top")T=k;else B=k;open=null}
  else if(r){if(mode==="top")B=r.dataset.r;else T=r.dataset.r;window.scrollTo({top:0,behavior:"smooth"})}
  else return;
  render()});
+$("sOut").onclick=()=>{open=open==="outer"?null:"outer";render()};
 $("sTop").onclick=()=>{open=open==="top"?null:"top";render()};
 $("sBot").onclick=()=>{open=open==="bottom"?null:"bottom";render()};
+$("m-outer").onclick=()=>{mode="outer";render()};
 $("m-top").onclick=()=>{mode="top";render()};
 $("m-bottom").onclick=()=>{mode="bottom";render()};
 render();
